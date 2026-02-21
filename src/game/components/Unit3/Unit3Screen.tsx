@@ -2,40 +2,72 @@
 
 /**
  * Unit 3 – Pathways to Harm.
- * Map the Threat Landscape, Prioritising pathways, Option 1–4, then Threat Blueprint builder.
+ * Uses new state: assets, pathwayChoice, threatCard (ThreatPathwayId, AssetId, ThreatCard).
  */
 
-import { useGameStore } from "@/game/state/gameStore";
-import type { ThreatCard as ThreatCardType, ThreatPathway } from "@/game/state/gameState";
-import { EMPTY_THREAT_CARD } from "@/game/state/gameState";
+import {
+  useGameStore,
+} from "@/game/state/gameStore";
+import type {
+  ThreatCard as ThreatCardType,
+  ThreatPathwayId,
+  AssetId,
+} from "@/game/state/gameState";
 import { BlockCard } from "@/game/components/Shared/BlockCard";
 import en from "@/game/data/i18n/en.json";
 
 const t = en.unit3;
-const pathwayLabels: Record<ThreatPathway, string> = {
+
+const PATHWAY_IDS: ThreatPathwayId[] = [
+  "power_concentration",
+  "gradual_disempowerment",
+  "catastrophic_pandemic",
+  "critical_infrastructure_collapse",
+];
+
+const pathwayLabels: Record<ThreatPathwayId, string> = {
   power_concentration: t.powerConcentration,
   gradual_disempowerment: t.gradualDisempowerment,
-  catastrophic_pandemics: t.catastrophicPandemics,
-  critical_infrastructure: t.criticalInfrastructure,
+  catastrophic_pandemic: t.catastrophicPandemics,
+  critical_infrastructure_collapse: t.criticalInfrastructure,
 };
 
-const ASSET_OPTIONS = [
-  "Democracy & elections",
-  "Schools & education",
-  "Hospitals & health",
-  "Environment & climate",
-  "Jobs & labour",
-  "Critical infrastructure",
-  "Privacy & safety",
-  "Other (describe below)",
+const ASSET_IDS: AssetId[] = [
+  "democracy_trust",
+  "critical_infrastructure",
+  "health_biosafety",
+  "economy_jobs",
+  "information_culture",
+  "environment_climate",
+  "human_agency_dignity",
 ];
 
-const OPTIONS = [
-  { key: "power_concentration" as ThreatPathway, titleKey: "option1Title", bodyKey: "option1Body", urlKey: "option1Url" },
-  { key: "gradual_disempowerment" as ThreatPathway, titleKey: "option2Title", bodyKey: "option2Body", urlKey: "option2Url" },
-  { key: "catastrophic_pandemics" as ThreatPathway, titleKey: "option3Title", bodyKey: "option3Body", urlKey: "option3Url" },
-  { key: "critical_infrastructure" as ThreatPathway, titleKey: "option4Title", bodyKey: "option4Body", urlKey: "option4Url" },
+const assetLabels: Record<AssetId, string> = {
+  democracy_trust: "Democracy & trust",
+  critical_infrastructure: "Critical infrastructure",
+  health_biosafety: "Health & biosafety",
+  economy_jobs: "Economy & jobs",
+  information_culture: "Information & culture",
+  environment_climate: "Environment & climate",
+  human_agency_dignity: "Human agency & dignity",
+};
+
+const OPTIONS: { key: ThreatPathwayId; titleKey: string; bodyKey: string; urlKey: string }[] = [
+  { key: "power_concentration", titleKey: "option1Title", bodyKey: "option1Body", urlKey: "option1Url" },
+  { key: "gradual_disempowerment", titleKey: "option2Title", bodyKey: "option2Body", urlKey: "option2Url" },
+  { key: "catastrophic_pandemic", titleKey: "option3Title", bodyKey: "option3Body", urlKey: "option3Url" },
+  { key: "critical_infrastructure_collapse", titleKey: "option4Title", bodyKey: "option4Body", urlKey: "option4Url" },
 ];
+
+const defaultThreatCard = (): ThreatCardType => ({
+  actor: "powerful_humans",
+  scale: "medium_org",
+  capabilities: [],
+  motivations: [],
+  targetAsset: "democracy_trust",
+  attackPathway: "power_concentration",
+  objective: "",
+});
 
 function ResourceLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -48,7 +80,14 @@ function ResourceLink({ href, children }: { href: string; children: React.ReactN
 export function Unit3Screen() {
   const { state, actions } = useGameStore();
   const u3 = state.unit3;
-  const card = u3.threatCard ?? { ...EMPTY_THREAT_CARD };
+  const card: ThreatCardType = u3.threatCard ?? defaultThreatCard();
+
+  const updatePathway = (path: ThreatPathwayId) => {
+    actions.updateUnit3({
+      pathwayChoice: { ...u3.pathwayChoice, chosenPathway: path },
+    });
+    actions.setThreatCard({ ...card, attackPathway: path });
+  };
 
   const updateCard = (partial: Partial<ThreatCardType>) => {
     actions.setThreatCard({ ...card, ...partial });
@@ -59,7 +98,6 @@ export function Unit3Screen() {
       <h2 className="h4 mb-3">{en.units["3"].title}</h2>
       <p className="text-muted mb-4">{en.units["3"].intro}</p>
 
-      {/* Map the Threat Landscape */}
       <section className="card mb-4 border-2 rounded-3" aria-labelledby="section-map-threat">
         <div className="card-body">
           <h3 id="section-map-threat" className="h5 card-title mb-3">
@@ -89,7 +127,6 @@ export function Unit3Screen() {
         </div>
       </section>
 
-      {/* Prioritising Threat Pathways + Exercise */}
       <section className="card mb-4 border-2 rounded-3" aria-labelledby="section-prioritising">
         <div className="card-body">
           <h3 id="section-prioritising" className="h5 card-title mb-3">
@@ -109,13 +146,12 @@ export function Unit3Screen() {
             className="form-control form-control-sm border-2 rounded-3 mb-2"
             rows={2}
             placeholder="The [ACTOR] with [CAPABILITY] and [MOTIVATION] attacks [ASSET] by [ATTACK PATHWAY] in order to [OBJECTIVE]."
-            value={u3.threatScenarioSentence ?? ""}
-            onChange={(e) => actions.updateUnit3({ threatScenarioSentence: e.target.value })}
+            value={card.summary ?? ""}
+            onChange={(e) => updateCard({ summary: e.target.value })}
           />
         </div>
       </section>
 
-      {/* Option 1–4: Pathway descriptions */}
       <section className="mb-4" aria-labelledby="pathway-options-heading">
         <h3 id="pathway-options-heading" className="h5 mb-3">
           Threat pathway options
@@ -137,36 +173,23 @@ export function Unit3Screen() {
         ))}
       </section>
 
-      {/* Your Threat Blueprint: asset + pathway + form */}
       <section className="mb-4" aria-labelledby="asset-blocks-heading">
         <h3 id="asset-blocks-heading" className="h5 mb-2">
           {t.assetBlocks}
         </h3>
         <div className="row g-2 mb-3">
-          {ASSET_OPTIONS.map((asset) => (
-            <div key={asset} className="col-12 col-sm-6 col-md-4">
+          {ASSET_IDS.map((id) => (
+            <div key={id} className="col-12 col-sm-6 col-md-4">
               <BlockCard
-                selected={card.asset === asset}
-                onClick={() => updateCard({ asset })}
-                aria-label={`Protect: ${asset}`}
+                selected={card.targetAsset === id}
+                onClick={() => updateCard({ targetAsset: id })}
+                aria-label={`Protect: ${assetLabels[id]}`}
               >
-                <span className="small fw-semibold">{asset}</span>
+                <span className="small fw-semibold">{assetLabels[id]}</span>
               </BlockCard>
             </div>
           ))}
         </div>
-        <label htmlFor="threat-asset" className="form-label small text-muted">
-          Or type your own:
-        </label>
-        <input
-          id="threat-asset"
-          type="text"
-          className="form-control form-control-sm border-2 rounded-3 mb-3"
-          placeholder="e.g. Local community, free press"
-          value={ASSET_OPTIONS.includes(card.asset) ? "" : card.asset}
-          onChange={(e) => updateCard({ asset: e.target.value })}
-          aria-label={t.threatCardAsset}
-        />
       </section>
 
       <section className="mb-4" aria-labelledby="pathway-blocks-heading">
@@ -174,11 +197,11 @@ export function Unit3Screen() {
           {t.pathways}
         </h3>
         <div className="row g-2">
-          {(Object.keys(pathwayLabels) as ThreatPathway[]).map((path) => (
+          {PATHWAY_IDS.map((path) => (
             <div key={path} className="col-12 col-md-6">
               <BlockCard
-                selected={card.pathway === path}
-                onClick={() => updateCard({ pathway: path })}
+                selected={card.attackPathway === path}
+                onClick={() => updatePathway(path)}
                 aria-label={`Pathway: ${pathwayLabels[path]}`}
               >
                 <span className="fw-semibold">{pathwayLabels[path]}</span>
@@ -195,30 +218,29 @@ export function Unit3Screen() {
           </h3>
           <p className="small text-muted mb-3">{t.realWorldNote}</p>
           <div className="mb-3">
-            <label htmlFor="threat-title" className="form-label">
-              Title (short)
+            <label htmlFor="threat-objective" className="form-label">
+              Objective (short)
             </label>
             <input
-              id="threat-title"
+              id="threat-objective"
               type="text"
               className="form-control border-2 rounded-3"
-              placeholder="e.g. Centralised control of critical systems"
-              value={card.title}
-              onChange={(e) => updateCard({ title: e.target.value })}
+              placeholder="e.g. Seize and keep power"
+              value={card.objective}
+              onChange={(e) => updateCard({ objective: e.target.value })}
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="threat-description" className="form-label">
+            <label htmlFor="threat-summary" className="form-label">
               {t.threatCardDescription}
             </label>
             <textarea
-              id="threat-description"
+              id="threat-summary"
               className="form-control border-2 rounded-3"
               rows={4}
-              placeholder="Describe the scenario: who is affected, how it could happen, and why it matters for People, Planet, or Parity."
-              value={card.description}
-              onChange={(e) => updateCard({ description: e.target.value })}
-              aria-required="true"
+              placeholder="Describe the scenario: who is affected, how it could happen, and why it matters."
+              value={card.summary ?? ""}
+              onChange={(e) => updateCard({ summary: e.target.value })}
             />
           </div>
           <button

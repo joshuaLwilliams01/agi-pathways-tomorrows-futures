@@ -21,19 +21,19 @@ import type {
   Unit4State,
   Unit5State,
   ThreatCard,
+  UnitId,
 } from "./gameState";
 import { createInitialGameState } from "./gameState";
 import { loadGameState, saveGameState } from "./persistence";
 
 type GameActions = {
-  setCurrentUnit: (unit: number) => void;
+  setCurrentUnit: (unit: UnitId | number) => void;
   updateUnit1: (partial: Partial<Unit1State>) => void;
   updateUnit2: (partial: Partial<Unit2State>) => void;
   updateUnit3: (partial: Partial<Unit3State>) => void;
   updateUnit4: (partial: Partial<Unit4State>) => void;
   updateUnit5: (partial: Partial<Unit5State>) => void;
-  setThreatCard: (card: ThreatCard | null) => void;
-  addJournalEntry: (unit: number, topic: string, content: string) => void;
+  setThreatCard: (card: ThreatCard | undefined) => void;
   resetGame: () => void;
 };
 
@@ -55,8 +55,9 @@ export function GameStoreProvider({ children }: { children: React.ReactNode }) {
     saveGameState(state);
   }, [state]);
 
-  const setCurrentUnit = useCallback((unit: number) => {
-    setState((prev) => ({ ...prev, currentUnit: Math.max(1, Math.min(5, unit)) }));
+  const setCurrentUnit = useCallback((unit: UnitId | number) => {
+    const u = Math.max(1, Math.min(5, Number(unit))) as UnitId;
+    setState((prev) => ({ ...prev, currentUnit: u }));
   }, []);
 
   const updateUnit1 = useCallback((partial: Partial<Unit1State>) => {
@@ -94,26 +95,16 @@ export function GameStoreProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
-  const setThreatCard = useCallback((card: ThreatCard | null) => {
+  const setThreatCard = useCallback((card: ThreatCard | undefined) => {
     setState((prev) => ({
       ...prev,
       unit3: { ...prev.unit3, threatCard: card },
     }));
   }, []);
 
-  const addJournalEntry = useCallback((unit: number, topic: string, content: string) => {
-    setState((prev) => ({
-      ...prev,
-      journal: [
-        ...prev.journal,
-        { unit, topic, content, timestamp: new Date().toISOString() },
-      ],
-    }));
-  }, []);
-
   const resetGame = useCallback(() => {
-    setState(createInitialGameState(state.meta.language));
-  }, [state.meta.language]);
+    setState(createInitialGameState());
+  }, []);
 
   const actions: GameActions = useMemo(
     () => ({
@@ -124,7 +115,6 @@ export function GameStoreProvider({ children }: { children: React.ReactNode }) {
       updateUnit4,
       updateUnit5,
       setThreatCard,
-      addJournalEntry,
       resetGame,
     }),
     [
@@ -135,7 +125,6 @@ export function GameStoreProvider({ children }: { children: React.ReactNode }) {
       updateUnit4,
       updateUnit5,
       setThreatCard,
-      addJournalEntry,
       resetGame,
     ]
   );

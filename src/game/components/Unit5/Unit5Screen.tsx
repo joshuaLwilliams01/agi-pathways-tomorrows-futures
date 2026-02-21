@@ -69,8 +69,12 @@ export function Unit5Screen() {
             className="form-control border-2 rounded-3"
             rows={3}
             placeholder="e.g. Policy advocacy for compute governance; technical safety at a lab; field-building..."
-            value={u5.interventionNotes}
-            onChange={(e) => actions.updateUnit5({ interventionNotes: e.target.value })}
+            value={u5.focus.reasoningNote ?? ""}
+            onChange={(e) =>
+              actions.updateUnit5({
+                focus: { ...u5.focus, reasoningNote: e.target.value },
+              })
+            }
           />
         </div>
       </section>
@@ -89,8 +93,20 @@ export function Unit5Screen() {
             className="form-control border-2 rounded-3"
             rows={4}
             placeholder="What does success look like? Who is already doing it? Which organisations could you join?"
-            value={u5.researchNotes ?? ""}
-            onChange={(e) => actions.updateUnit5({ researchNotes: e.target.value })}
+            value={u5.intervention.research?.currentStatus ?? ""}
+            onChange={(e) =>
+              actions.updateUnit5({
+                intervention: {
+                  ...u5.intervention,
+                  research: {
+                    successPicture: u5.intervention.research?.successPicture ?? "",
+                    helpsAiGoWell: u5.intervention.research?.helpsAiGoWell ?? "",
+                    currentStatus: e.target.value,
+                    orgsToWatch: u5.intervention.research?.orgsToWatch ?? "",
+                  },
+                },
+              })
+            }
           />
         </div>
       </section>
@@ -113,8 +129,20 @@ export function Unit5Screen() {
               className="form-control border-2 rounded-3"
               rows={2}
               placeholder="One or two concrete steps to get started..."
-              value={u5.shortTermPlan}
-              onChange={(e) => actions.updateUnit5({ shortTermPlan: e.target.value })}
+              value={u5.shortTermPlan[0]?.label ?? ""}
+              onChange={(e) =>
+                actions.updateUnit5({
+                  shortTermPlan: [
+                    {
+                      id: "1",
+                      label: e.target.value,
+                      category: "learn",
+                      timeFrame: "next_6_months",
+                    },
+                    ...u5.shortTermPlan.slice(1),
+                  ],
+                })
+              }
             />
           </div>
           <div className="mb-3">
@@ -126,8 +154,16 @@ export function Unit5Screen() {
               className="form-control border-2 rounded-3"
               rows={2}
               placeholder="Direction: skills, projects, relationships..."
-              value={u5.midTermPlan}
-              onChange={(e) => actions.updateUnit5({ midTermPlan: e.target.value })}
+              value={u5.longTermDirection?.skills ?? ""}
+              onChange={(e) =>
+                actions.updateUnit5({
+                  longTermDirection: {
+                    skills: e.target.value,
+                    projects: u5.longTermDirection?.projects ?? "",
+                    relationships: u5.longTermDirection?.relationships ?? "",
+                  },
+                })
+              }
             />
           </div>
           <div>
@@ -139,8 +175,12 @@ export function Unit5Screen() {
               className="form-control border-2 rounded-3"
               rows={3}
               placeholder="Link your intervention and role to the threat pathway and defence you chose..."
-              value={u5.alignmentNarrative}
-              onChange={(e) => actions.updateUnit5({ alignmentNarrative: e.target.value })}
+              value={u5.alignmentNarrative?.text ?? ""}
+              onChange={(e) =>
+                actions.updateUnit5({
+                  alignmentNarrative: { text: e.target.value },
+                })
+              }
             />
           </div>
         </div>

@@ -1,6 +1,7 @@
 /**
  * LocalStorage load/save for game state.
- * MVP: single key "agi-pathways-game-state".
+ * Single key "agi-pathways-game-state".
+ * Invalid or legacy state resets to createInitialGameState().
  */
 
 import type { GameState } from "./gameState";
@@ -16,11 +17,10 @@ export function loadGameState(): GameState {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return createInitialGameState();
     const parsed = JSON.parse(raw) as GameState;
-    // Basic validation: ensure required keys exist
     if (
       parsed &&
+      parsed.meta?.version != null &&
       typeof parsed.currentUnit === "number" &&
-      parsed.meta &&
       parsed.unit1 &&
       parsed.unit2 &&
       parsed.unit3 &&
@@ -42,7 +42,7 @@ export function saveGameState(state: GameState): void {
       ...state,
       meta: {
         ...state.meta,
-        lastSaved: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       },
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));

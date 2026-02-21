@@ -14,10 +14,11 @@ import en from "@/game/data/i18n/en.json";
 function GameContent() {
   const { state, actions } = useGameStore();
   const unit = state.currentUnit;
+  const defaultPPP = { people: 50, planet: 50, parity: 50 };
   const pppScores =
-    unit === 1
-      ? state.unit1.pppPreferences
-      : { people: 50, planet: 50, parity: 50 };
+    unit === 1 && state.unit1.societalFuture?.pppScore
+      ? state.unit1.societalFuture.pppScore
+      : defaultPPP;
 
   const UnitComponent =
     unit === 1

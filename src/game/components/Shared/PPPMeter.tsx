@@ -5,7 +5,7 @@
  * Used in game sidebar; supports keyboard and screen readers.
  */
 
-import type { PPPScores } from "@/game/state/gameState";
+import type { PPPScore } from "@/game/state/gameState";
 
 const LABELS = {
   people: "People",
@@ -21,7 +21,7 @@ const COLORS = {
 
 interface PPPMeterProps {
   /** Current PPP scores (0–100) */
-  scores: PPPScores;
+  scores: PPPScore;
   /** Optional aria-label for the whole group */
   ariaLabel?: string;
 }
@@ -33,7 +33,7 @@ export function PPPMeter({ scores, ariaLabel = "Your priorities: People, Planet,
       role="group"
       aria-label={ariaLabel}
     >
-      {(Object.keys(LABELS) as Array<keyof PPPScores>).map((key) => (
+      {(Object.keys(LABELS) as Array<keyof PPPScore>).map((key) => (
         <div key={key} className="mb-2">
           <label htmlFor={`ppp-${key}`} className="form-label small mb-0">
             {LABELS[key]} <span className="visually-hidden">({scores[key]}%)</span>

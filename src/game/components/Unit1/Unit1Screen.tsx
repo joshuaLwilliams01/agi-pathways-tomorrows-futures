@@ -2,10 +2,10 @@
 
 /**
  * Unit 1 – Racing to a Better Future.
- * Sections: Imagine a Better Future (course materials), What Future Do You Want? (activities),
- * Steering the Race to AGI (course materials), The Characters (activity).
+ * Binds to new state: PersonalFutureEntry, SocietalFutureSnapshot, notes.
  */
 
+import type { PPPScore, SocietalFutureSnapshot } from "@/game/state/gameState";
 import { useGameStore } from "@/game/state/gameStore";
 import { PPPMeter } from "@/game/components/Shared/PPPMeter";
 import { BlockCard } from "@/game/components/Shared/BlockCard";
@@ -15,43 +15,43 @@ const t = en.unit1;
 const pppT = en.ppp;
 
 const PPP_BOOST = 15;
-const MAX_PPP = 100;
+const MAX = 100;
+const clamp = (v: number) => Math.max(0, Math.min(MAX, v));
 
-function clamp(v: number) {
-  return Math.max(0, Math.min(MAX_PPP, v));
-}
+const defaultPPPScore: PPPScore = { people: 50, planet: 50, parity: 50 };
+
+const defaultSocietalFuture = (): SocietalFutureSnapshot => ({
+  politics: 50,
+  economy: 50,
+  technology: 50,
+  environment: 50,
+  community: 50,
+  description: "",
+  pppScore: { ...defaultPPPScore },
+});
 
 export function Unit1Screen() {
   const { state, actions } = useGameStore();
   const u1 = state.unit1;
+  const societal = u1.societalFuture ?? defaultSocietalFuture();
+  const ppp = societal.pppScore;
 
-  const setPeople = (v: number) =>
+  const setPpp = (key: keyof PPPScore, value: number) => {
     actions.updateUnit1({
-      pppPreferences: { ...u1.pppPreferences, people: clamp(v) },
-    });
-  const setPlanet = (v: number) =>
-    actions.updateUnit1({
-      pppPreferences: { ...u1.pppPreferences, planet: clamp(v) },
-    });
-  const setParity = (v: number) =>
-    actions.updateUnit1({
-      pppPreferences: { ...u1.pppPreferences, parity: clamp(v) },
-    });
-
-  const boost = (key: "people" | "planet" | "parity") => {
-    const current = u1.pppPreferences[key];
-    const next = clamp(current + PPP_BOOST);
-    actions.updateUnit1({
-      pppPreferences: { ...u1.pppPreferences, [key]: next },
+      societalFuture: {
+        ...societal,
+        pppScore: { ...ppp, [key]: clamp(value) },
+      },
     });
   };
+  const boost = (key: keyof PPPScore) =>
+    setPpp(key, clamp(ppp[key] + PPP_BOOST));
 
   return (
     <div className="unit1-screen">
       <h2 className="h4 mb-3">{en.units["1"].title}</h2>
       <p className="text-muted mb-4">{en.units["1"].intro}</p>
 
-      {/* Section 1: Imagine a Better Future – Course Materials */}
       <section className="card mb-4 border-2 rounded-3" aria-labelledby="section-imagine">
         <div className="card-body">
           <h3 id="section-imagine" className="h5 card-title mb-3">
@@ -69,14 +69,11 @@ export function Unit1Screen() {
                 {t.resourcePreparingForLaunch}
               </a>
             </li>
-            <li>
-              {t.resourceUtopiaPdf}
-            </li>
+            <li>{t.resourceUtopiaPdf}</li>
           </ul>
         </div>
       </section>
 
-      {/* Section 2: What Future Do You Want? (Activity) */}
       <section className="mb-4" aria-labelledby="section-what-future">
         <h3 id="section-what-future" className="h5 mb-3">
           {t.sectionWhatFuture}
@@ -90,10 +87,15 @@ export function Unit1Screen() {
             <textarea
               className="form-control border-2 rounded-3"
               rows={4}
-              placeholder="Describe a week in your life, 20 years from now, when you're living a good, happy life..."
-              value={u1.personalFuture[0] ?? ""}
+              placeholder="Describe a week in your life, 20 years from now..."
+              value={u1.personalFuture?.summary ?? ""}
               onChange={(e) =>
-                actions.updateUnit1({ personalFuture: [e.target.value] })
+                actions.updateUnit1({
+                  personalFuture: {
+                    ageInFuture: u1.personalFuture?.ageInFuture ?? 20,
+                    summary: e.target.value,
+                  },
+                })
               }
               aria-label={t.personalFuturePrompt}
             />
@@ -109,7 +111,7 @@ export function Unit1Screen() {
             <div className="row g-2 mb-3">
               <div className="col-md-4">
                 <BlockCard
-                  selected={u1.pppPreferences.people >= 60}
+                  selected={ppp.people >= 60}
                   onClick={() => boost("people")}
                   aria-label={`Boost ${pppT.people} priority`}
                 >
@@ -119,7 +121,7 @@ export function Unit1Screen() {
               </div>
               <div className="col-md-4">
                 <BlockCard
-                  selected={u1.pppPreferences.planet >= 60}
+                  selected={ppp.planet >= 60}
                   onClick={() => boost("planet")}
                   aria-label={`Boost ${pppT.planet} priority`}
                 >
@@ -129,7 +131,7 @@ export function Unit1Screen() {
               </div>
               <div className="col-md-4">
                 <BlockCard
-                  selected={u1.pppPreferences.parity >= 60}
+                  selected={ppp.parity >= 60}
                   onClick={() => boost("parity")}
                   aria-label={`Boost ${pppT.parity} priority`}
                 >
@@ -140,7 +142,7 @@ export function Unit1Screen() {
             </div>
             <div className="mb-2">
               <label htmlFor="ppp-people" className="form-label small">
-                {pppT.people} — {u1.pppPreferences.people}%
+                {pppT.people} — {ppp.people}%
               </label>
               <input
                 id="ppp-people"
@@ -148,14 +150,14 @@ export function Unit1Screen() {
                 className="form-range"
                 min={0}
                 max={100}
-                value={u1.pppPreferences.people}
-                onChange={(e) => setPeople(Number(e.target.value))}
-                aria-valuetext={`${u1.pppPreferences.people}%`}
+                value={ppp.people}
+                onChange={(e) => setPpp("people", Number(e.target.value))}
+                aria-valuetext={`${ppp.people}%`}
               />
             </div>
             <div className="mb-2">
               <label htmlFor="ppp-planet" className="form-label small">
-                {pppT.planet} — {u1.pppPreferences.planet}%
+                {pppT.planet} — {ppp.planet}%
               </label>
               <input
                 id="ppp-planet"
@@ -163,14 +165,14 @@ export function Unit1Screen() {
                 className="form-range"
                 min={0}
                 max={100}
-                value={u1.pppPreferences.planet}
-                onChange={(e) => setPlanet(Number(e.target.value))}
-                aria-valuetext={`${u1.pppPreferences.planet}%`}
+                value={ppp.planet}
+                onChange={(e) => setPpp("planet", Number(e.target.value))}
+                aria-valuetext={`${ppp.planet}%`}
               />
             </div>
             <div className="mb-3">
               <label htmlFor="ppp-parity" className="form-label small">
-                {pppT.parity} — {u1.pppPreferences.parity}%
+                {pppT.parity} — {ppp.parity}%
               </label>
               <input
                 id="ppp-parity"
@@ -178,9 +180,9 @@ export function Unit1Screen() {
                 className="form-range"
                 min={0}
                 max={100}
-                value={u1.pppPreferences.parity}
-                onChange={(e) => setParity(Number(e.target.value))}
-                aria-valuetext={`${u1.pppPreferences.parity}%`}
+                value={ppp.parity}
+                onChange={(e) => setPpp("parity", Number(e.target.value))}
+                aria-valuetext={`${ppp.parity}%`}
               />
             </div>
             <label htmlFor="societal-notes" className="form-label small">
@@ -191,9 +193,11 @@ export function Unit1Screen() {
               className="form-control form-control-sm border-2 rounded-3"
               rows={2}
               placeholder="What would the world look like if you felt pride welcoming 2.7 billion new people?"
-              value={u1.societalFutureNotes ?? ""}
+              value={societal.description}
               onChange={(e) =>
-                actions.updateUnit1({ societalFutureNotes: e.target.value })
+                actions.updateUnit1({
+                  societalFuture: { ...societal, description: e.target.value },
+                })
               }
               aria-label="Notes on societal future"
             />
@@ -202,11 +206,10 @@ export function Unit1Screen() {
 
         <div aria-label="Your priorities summary">
           <h4 className="h6 mb-2">{pppT.meterLabel}</h4>
-          <PPPMeter scores={u1.pppPreferences} />
+          <PPPMeter scores={ppp} />
         </div>
       </section>
 
-      {/* Section 3: Steering the Race to AGI – Course Materials */}
       <section className="card mb-4 border-2 rounded-3" aria-labelledby="section-steering">
         <div className="card-body">
           <h3 id="section-steering" className="h5 card-title mb-3">
@@ -235,7 +238,6 @@ export function Unit1Screen() {
         </div>
       </section>
 
-      {/* Section 4: The Characters (Activity) */}
       <section className="card mb-4 border-2 rounded-3" aria-labelledby="section-characters">
         <div className="card-body">
           <h3 id="section-characters" className="h5 card-title mb-3">
@@ -244,12 +246,7 @@ export function Unit1Screen() {
           <p className="mb-2">{t.charactersInstruction}</p>
           <p className="small text-muted mb-3">{t.charactersNote}</p>
           <p className="mb-3">
-            <a
-              href={t.characterCardsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="fw-semibold"
-            >
+            <a href={t.characterCardsUrl} target="_blank" rel="noopener noreferrer" className="fw-semibold">
               {t.characterCardsLinkText}
             </a>
           </p>
@@ -261,10 +258,8 @@ export function Unit1Screen() {
             className="form-control border-2 rounded-3"
             rows={6}
             placeholder={t.characterNotesPlaceholder}
-            value={u1.characterNotes ?? ""}
-            onChange={(e) =>
-              actions.updateUnit1({ characterNotes: e.target.value })
-            }
+            value={u1.notes ?? ""}
+            onChange={(e) => actions.updateUnit1({ notes: e.target.value })}
             aria-label="Character motivations, capabilities, and pressures"
           />
         </div>
