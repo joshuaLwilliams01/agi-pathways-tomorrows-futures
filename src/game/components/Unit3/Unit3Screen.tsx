@@ -82,9 +82,11 @@ export function Unit3Screen() {
   const u3 = state.unit3;
   const card: ThreatCardType = u3.threatCard ?? defaultThreatCard();
 
+  const pathwayChoice = u3.pathwayChoice ?? { chosenPathway: null, reasoningNote: "" };
+
   const updatePathway = (path: ThreatPathwayId) => {
     actions.updateUnit3({
-      pathwayChoice: { ...u3.pathwayChoice, chosenPathway: path },
+      pathwayChoice: { ...pathwayChoice, chosenPathway: path },
     });
     actions.setThreatCard({ ...card, attackPathway: path });
   };

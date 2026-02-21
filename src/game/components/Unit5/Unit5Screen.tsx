@@ -6,6 +6,7 @@
  */
 
 import { useGameStore } from "@/game/state/gameStore";
+import type { FocusSector } from "@/game/state/gameState";
 import en from "@/game/data/i18n/en.json";
 
 const t = en.unit5;
@@ -18,9 +19,14 @@ function ResourceLink({ href, children }: { href: string; children: React.ReactN
   );
 }
 
+const defaultFocus = { sector: null as FocusSector | null, reasoningNote: "" };
+const defaultIntervention = { chosenIntervention: undefined, research: undefined };
+
 export function Unit5Screen() {
   const { state, actions } = useGameStore();
   const u5 = state.unit5;
+  const focus = u5.focus ?? defaultFocus;
+  const intervention = u5.intervention ?? defaultIntervention;
 
   return (
     <div className="unit5-screen">
@@ -69,10 +75,10 @@ export function Unit5Screen() {
             className="form-control border-2 rounded-3"
             rows={3}
             placeholder="e.g. Policy advocacy for compute governance; technical safety at a lab; field-building..."
-            value={u5.focus.reasoningNote ?? ""}
+            value={focus.reasoningNote ?? ""}
             onChange={(e) =>
               actions.updateUnit5({
-                focus: { ...u5.focus, reasoningNote: e.target.value },
+                focus: { ...focus, reasoningNote: e.target.value },
               })
             }
           />
@@ -93,16 +99,16 @@ export function Unit5Screen() {
             className="form-control border-2 rounded-3"
             rows={4}
             placeholder="What does success look like? Who is already doing it? Which organisations could you join?"
-            value={u5.intervention.research?.currentStatus ?? ""}
+            value={intervention.research?.currentStatus ?? ""}
             onChange={(e) =>
               actions.updateUnit5({
                 intervention: {
-                  ...u5.intervention,
+                  ...intervention,
                   research: {
-                    successPicture: u5.intervention.research?.successPicture ?? "",
-                    helpsAiGoWell: u5.intervention.research?.helpsAiGoWell ?? "",
+                    successPicture: intervention.research?.successPicture ?? "",
+                    helpsAiGoWell: intervention.research?.helpsAiGoWell ?? "",
                     currentStatus: e.target.value,
-                    orgsToWatch: u5.intervention.research?.orgsToWatch ?? "",
+                    orgsToWatch: intervention.research?.orgsToWatch ?? "",
                   },
                 },
               })
