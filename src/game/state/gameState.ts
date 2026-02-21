@@ -21,14 +21,18 @@ export interface JournalEntry {
 
 /** Unit 1: Racing to a Better Future */
 export interface Unit1State {
-  /** Personal future calendar / "My Future Week" choices */
+  /** Personal future: "a week when you're [age+20]" reflection */
   personalFuture: string[];
-  /** Societal future sliders / "World Welcome Party" values */
+  /** Societal future: what would the world look like (2.7B new people) */
   societalFuture: Record<string, number>;
+  /** Societal future free-text reflection */
+  societalFutureNotes?: string;
   /** PPP preferences from sliders */
   pppPreferences: PPPScores;
-  /** Optional character perspective for older players */
+  /** Chosen character from AGI Strategy character cards */
   chosenCharacterId?: string;
+  /** 2–3 paragraphs: character's motivations, capabilities, pressures */
+  characterNotes?: string;
 }
 
 /** Unit 2: Drivers of AI Progress */
@@ -61,6 +65,8 @@ export interface Unit3State {
   protectedAssets: string[];
   coalitionNotes: string;
   threatCard: ThreatCard | null;
+  /** Template sentence: The [ACTOR] with [CAPABILITY]... */
+  threatScenarioSentence?: string;
 }
 
 /** Unit 4: Defence in Depth */
@@ -88,6 +94,8 @@ export interface Unit4State {
 export interface Unit5State {
   interventionId: string;
   interventionNotes: string;
+  /** Research: success, current status, organisations */
+  researchNotes?: string;
   roleArchetype: string;
   shortTermPlan: string; // 3–6 month steps
   midTermPlan: string;   // 1–3 year direction
