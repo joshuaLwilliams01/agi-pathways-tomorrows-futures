@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "title": "AGI Pathways: Tomorrow's Futures",
+    "description": "A web-based strategy game about AI safety and governance. Shape the future of AGI."
+  },
+  "landing": {
+    "title": "AGI Pathways: Tomorrow's Futures",
+    "tagline": "Shape the future of AI. Learn, imagine, and act.",
+    "description": "Imagine futures worth protecting. Learn how advanced AI might reshape our world. Explore pathways to harm and build defences. Create your own action plan for AI safety and governance.",
+    "ctaPrimary": "Start the game",
+    "ctaSecondary": "For educators & cohorts",
+    "howItWorks": "How it works",
+    "howItWorksBody": "Five units guide you from imagining better futures to writing a simple action plan. No login needed — your progress is saved in your browser.",
+    "disclaimer": "This is an independent capstone project by Joshua Williams for the BlueDot Impact AGI Strategy Course; it is not associated with BlueDot Impact or its staff.",
+    "about": "About",
+    "aboutBody": "This game is designed for ages 8+ and works on phones, tablets, and computers. You'll create a Threat Card, a Defence Map, and a Personal Action Plan."
+  },
+  "game": {
+    "title": "AGI Pathways",
+    "unit": "Unit",
+    "reset": "Reset game",
+    "currentUnit": "Unit {{number}}"
+  },
+  "units": {
+    "1": {
+      "title": "Racing to a Better Future",
+      "shortTitle": "Better Future",
+      "intro": "Imagine your future and the world's future. What do you want to protect?"
+    },
+    "2": {
+      "title": "Drivers of AI Progress",
+      "shortTitle": "AI Progress",
+      "intro": "See how AI gets better: compute, algorithms, and data."
+    },
+    "3": {
+      "title": "Pathways to Harm",
+      "shortTitle": "Pathways to Harm",
+      "intro": "Choose what to protect and explore how things could go wrong."
+    },
+    "4": {
+      "title": "Defence in Depth",
+      "shortTitle": "Defence in Depth",
+      "intro": "Build layers of defence: prevent, constrain, and withstand."
+    },
+    "5": {
+      "title": "Start Contributing",
+      "shortTitle": "Start Contributing",
+      "intro": "Choose an intervention and make a simple action plan."
+    }
+  },
+  "unit1": {
+    "myFutureWeek": "My Future Week",
+    "personalFuturePrompt": "What does a good week in your future look like? (e.g. school, family, hobbies)",
+    "worldWelcomeParty": "World Welcome Party",
+    "societalSliders": "How important are these for the world? Move the sliders.",
+    "people": "People",
+    "planet": "Planet",
+    "parity": "Parity",
+    "peopleHint": "Safety, dignity, inclusion for everyone.",
+    "planetHint": "A healthy environment for all.",
+    "parityHint": "Fairness and balance of power."
+  },
+  "unit3": {
+    "chooseAsset": "What do you want to protect?",
+    "pathways": "Pathways to harm",
+    "powerConcentration": "Power concentration",
+    "gradualDisempowerment": "Gradual disempowerment",
+    "catastrophicPandemics": "Catastrophic pandemics",
+    "criticalInfrastructure": "Critical infrastructure",
+    "threatCardTitle": "Your Threat Card",
+    "threatCardAsset": "Asset at risk",
+    "threatCardPathway": "Pathway",
+    "threatCardDescription": "What could happen?",
+    "writeThreatCard": "Write your Threat Card",
+    "saveThreatCard": "Save Threat Card"
+  },
+  "ppp": {
+    "people": "People",
+    "planet": "Planet",
+    "parity": "Parity",
+    "meterLabel": "Your priorities (People, Planet, Parity)"
+  }
+}

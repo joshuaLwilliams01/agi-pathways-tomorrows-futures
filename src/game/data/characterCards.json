@@ -1,0 +1,20 @@
+[
+  {
+    "id": "optimist",
+    "name": "The Optimist",
+    "description": "You believe we can build AI that helps everyone. You focus on the best outcomes.",
+    "pppBias": { "people": 60, "planet": 50, "parity": 50 }
+  },
+  {
+    "id": "guardian",
+    "name": "The Guardian",
+    "description": "You want strong rules so powerful AI doesn't hurt people or the planet.",
+    "pppBias": { "people": 70, "planet": 60, "parity": 55 }
+  },
+  {
+    "id": "explorer",
+    "name": "The Explorer",
+    "description": "You're curious about how AI could spread power and knowledge fairly.",
+    "pppBias": { "people": 55, "planet": 55, "parity": 70 }
+  }
+]

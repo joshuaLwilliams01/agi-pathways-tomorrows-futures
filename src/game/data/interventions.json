@@ -1,0 +1,6 @@
+[
+  { "id": "policy", "name": "Policy & governance", "description": "Help shape rules and decisions about how AI is used." },
+  { "id": "technical", "name": "Technical safety", "description": "Work on making AI systems safer and more reliable." },
+  { "id": "fieldbuilding", "name": "Field-building", "description": "Support more people to learn and work on AI safety." },
+  { "id": "community", "name": "Community & access", "description": "Bring AI literacy and access to your community." }
+]

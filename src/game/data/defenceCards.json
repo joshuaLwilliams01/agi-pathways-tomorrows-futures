@@ -1,0 +1,7 @@
+[
+  { "id": "d1", "label": "Strong oversight", "layer": "prevent", "killChainStage": "governance" },
+  { "id": "d2", "label": "Safety tests before release", "layer": "prevent", "killChainStage": "development" },
+  { "id": "d3", "label": "Limits on who can use it", "layer": "constrain", "killChainStage": "access" },
+  { "id": "d4", "label": "Backups and recovery plans", "layer": "withstand", "killChainStage": "response" },
+  { "id": "d5", "label": "Transparent audits", "layer": "constrain", "killChainStage": "monitoring" }
+]

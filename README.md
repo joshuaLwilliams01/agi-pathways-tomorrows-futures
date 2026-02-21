@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AGI Pathways: Tomorrow's Futures
 
-## Getting Started
+A web-based, sandbox-style strategy game about AI safety and governance. Players imagine futures worth protecting, explore pathways to harm, build defences, and create a simple action plan.
 
-First, run the development server:
+**Stack:** Next.js (App Router) + TypeScript + Bootstrap 5  
+**Deployment:** Vercel  
+**Author:** Joshua Williams (BlueDot Impact AGI Strategy Course capstone)
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Use **Start the game** to go to `/game`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/` – Next.js routes (landing `page.tsx`, game `game/page.tsx`)
+- `src/game/state/` – Game state types, React Context store, localStorage persistence
+- `src/game/components/` – Unit screens (Unit1–Unit5), Shared (PPPMeter, UnitNav), Hero
+- `src/game/data/` – i18n (`en.json`), character cards, defence cards, interventions
 
-## Learn More
+## Game state
 
-To learn more about Next.js, take a look at the following resources:
+Progress is stored in the browser under `agi-pathways-game-state`. No login required. Reset via the **Reset game** button in the game navbar.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Accessibility
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Aim is WCAG 2.1 AA for key flows: keyboard navigation, visible focus, labels and ARIA where needed. Validate with [WAVE](https://wave.webaim.org/).
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Private / capstone project. See PRD.md for full product requirements.
