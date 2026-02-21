@@ -7,6 +7,7 @@ interface HeroProps {
   tagline: string;
   description: string;
   ctaPrimary: string;
+  ctaSubline?: string;
   ctaSecondary: string;
 }
 
@@ -15,6 +16,7 @@ export function Hero({
   tagline,
   description,
   ctaPrimary,
+  ctaSubline,
   ctaSecondary,
 }: HeroProps) {
   return (
@@ -25,7 +27,7 @@ export function Hero({
         </h1>
         <p className="lead text-muted mb-3">{tagline}</p>
         <p className="mb-4 max-w-600">{description}</p>
-        <div className="d-flex flex-wrap gap-3">
+        <div className="d-flex flex-wrap gap-3 align-items-center">
           <Link
             href="/game"
             className="btn btn-primary btn-lg"
@@ -40,6 +42,11 @@ export function Hero({
           >
             {ctaSecondary}
           </a>
+          {ctaSubline && (
+            <span className="text-muted small ms-2 ms-md-0 mt-2 mt-md-0 w-100 w-md-auto">
+              {ctaSubline}
+            </span>
+          )}
         </div>
       </div>
     </section>

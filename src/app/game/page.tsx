@@ -32,7 +32,7 @@ function GameContent() {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+      <nav className="navbar navbar-expand-lg navbar-light border-bottom border-2" style={{ background: "linear-gradient(90deg, #e0f2fe 0%, #fef3c7 100%)" }}>
         <div className="container-fluid">
           <Link className="navbar-brand fw-bold" href="/">
             {en.game.title}
@@ -45,7 +45,7 @@ function GameContent() {
               type="button"
               className="btn btn-outline-danger btn-sm"
               onClick={() => {
-                if (typeof window !== "undefined" && window.confirm("Reset all progress?")) {
+                if (typeof window !== "undefined" && window.confirm("Reset your build? All progress will be cleared.")) {
                   actions.resetGame();
                 }
               }}
@@ -61,13 +61,22 @@ function GameContent() {
         <div className="row">
           <div className="col-lg-8">
             <UnitNav />
+            <div className="alert alert-light border-2 rounded-3 mb-3 py-2 px-3" role="region" aria-labelledby="how-to-play-heading">
+              <h4 id="how-to-play-heading" className="h6 mb-2">{en.game.howToPlay}</h4>
+              <p className="small mb-1">{en.game.howToPlayIntro}</p>
+              <ul className="small mb-0 ps-3">
+                <li>{en.game.howToPlayZone1}</li>
+                <li>{en.game.howToPlayZone3}</li>
+                <li>{en.game.howToPlayNav}</li>
+              </ul>
+            </div>
             <UnitComponent />
           </div>
           <aside
             className="col-lg-4 mt-3 mt-lg-0"
-            aria-label="Your priorities and progress"
+            aria-label="Your build: priorities and progress"
           >
-            <div className="card sticky-top">
+            <div className="card sticky-top border-2 rounded-3">
               <div className="card-body">
                 <h3 className="h6 card-title">{en.ppp.meterLabel}</h3>
                 <PPPMeter scores={pppScores} />

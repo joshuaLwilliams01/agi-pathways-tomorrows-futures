@@ -1,12 +1,18 @@
-/* AGI Pathways – global overrides and PPP theme */
+/* AGI Pathways – sandbox/builder theme (Trailmakers-inspired) */
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #1e293b;
   --ppp-people: #0d6efd;
   --ppp-planet: #198754;
   --ppp-parity: #0dcaf0;
+  /* Builder/sandbox accents */
+  --block-border: #cbd5e1;
+  --block-selected: #f59e0b;
+  --block-bg: #ffffff;
+  --sandbox-accent: #ea580c;
+  --sandbox-bg: linear-gradient(145deg, #e0f2fe 0%, #ecfdf5 40%, #fef3c7 100%);
 }
 
 @theme inline {
@@ -20,22 +26,39 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Bootstrap overrides: BlueDot-esque cool blues/greens */
+/* Hero: adventurous sandbox feel */
 .hero {
-  background: linear-gradient(135deg, #e8f4f8 0%, #f0f9f4 100%);
+  background: var(--sandbox-bg);
+  border-bottom: 3px solid var(--block-border);
 }
 
 .max-w-600 {
   max-width: 600px;
 }
 
+/* Block cards – snap-together builder UI */
+.block-card {
+  background: var(--block-bg);
+  border-color: var(--block-border);
+}
+.block-card--interactive:hover {
+  border-color: var(--sandbox-accent);
+  background: #fff7ed;
+}
+.block-card--selected,
+.block-card--interactive[aria-pressed="true"] {
+  border-color: var(--block-selected);
+  background: #fffbeb;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
 /* Focus visible for accessibility (WCAG 2.1 AA) */
 *:focus-visible {
-  outline: 2px solid var(--ppp-people);
+  outline: 2px solid var(--sandbox-accent);
   outline-offset: 2px;
 }
 
-/* Ensure progress bars have sufficient contrast */
+/* Progress bars */
 .progress-bar {
   transition: width 0.2s ease;
 }

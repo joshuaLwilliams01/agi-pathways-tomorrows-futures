@@ -1,18 +1,18 @@
 "use client";
 
 /**
- * Unit navigation: previous/next and unit tabs.
- * Updates currentUnit in GameState via useGameStore.
+ * Unit navigation: previous/next and zone tabs (sandbox builder style).
  */
 
 import { useGameStore } from "@/game/state/gameStore";
+import en from "@/game/data/i18n/en.json";
 
-const UNIT_TITLES: Record<number, string> = {
-  1: "Better Future",
-  2: "AI Progress",
-  3: "Pathways to Harm",
-  4: "Defence in Depth",
-  5: "Start Contributing",
+const ZONE_TITLES: Record<number, string> = {
+  1: en.units["1"].shortTitle,
+  2: en.units["2"].shortTitle,
+  3: en.units["3"].shortTitle,
+  4: en.units["4"].shortTitle,
+  5: en.units["5"].shortTitle,
 };
 
 export function UnitNav() {
@@ -22,26 +22,26 @@ export function UnitNav() {
   const canNext = current < 5;
 
   return (
-    <nav aria-label="Game units">
+    <nav aria-label="Build zones">
       <div className="d-flex flex-wrap align-items-center gap-2 mb-3">
         <button
           type="button"
           className="btn btn-outline-primary btn-sm"
           onClick={() => actions.setCurrentUnit(current - 1)}
           disabled={!canPrev}
-          aria-label="Previous unit"
+          aria-label="Previous zone"
         >
           Previous
         </button>
         <span className="text-muted small">
-          Unit {current} of 5
+          Zone {current} of 5
         </span>
         <button
           type="button"
           className="btn btn-primary btn-sm"
           onClick={() => actions.setCurrentUnit(current + 1)}
           disabled={!canNext}
-          aria-label="Next unit"
+          aria-label="Next zone"
         >
           Next
         </button>
@@ -53,7 +53,7 @@ export function UnitNav() {
               type="button"
               role="tab"
               aria-selected={current === unit}
-              aria-label={`Unit ${unit}: ${UNIT_TITLES[unit]}`}
+              aria-label={`Zone ${unit}: ${ZONE_TITLES[unit]}`}
               className={`nav-link py-1 px-2 ${current === unit ? "active" : ""}`}
               onClick={() => actions.setCurrentUnit(unit)}
             >

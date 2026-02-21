@@ -1,83 +1,104 @@
 {
   "meta": {
     "title": "AGI Pathways: Tomorrow's Futures",
-    "description": "A web-based strategy game about AI safety and governance. Shape the future of AGI."
+    "description": "Build your path to a better AI future. A hands-on sandbox where you assemble strategies, test scenarios, and create real-world action plans."
   },
   "landing": {
     "title": "AGI Pathways: Tomorrow's Futures",
-    "tagline": "Shape the future of AI. Learn, imagine, and act.",
-    "description": "Imagine futures worth protecting. Learn how advanced AI might reshape our world. Explore pathways to harm and build defences. Create your own action plan for AI safety and governance.",
-    "ctaPrimary": "Start the game",
+    "tagline": "Build your path. Explore scenarios. Assemble what matters.",
+    "description": "Snap together your strategy in a hands-on sandbox. Build defences, test real threat pathways, and create a blueprint you can use in the real world — for policy, education, or your community.",
+    "ctaPrimary": "Enter the sandbox",
+    "ctaSubline": "Build · Explore · Apply",
     "ctaSecondary": "For educators & cohorts",
+    "howToTryIt": "How to try it",
+    "howToTryItStep1": "Click “Enter the sandbox” to open the game.",
+    "howToTryItStep2": "Start in Zone 1: build your week and tap the People / Planet / Parity blocks to set priorities. Use the sliders to fine-tune.",
+    "howToTryItStep3": "Jump to Zone 3: choose what to protect (e.g. schools, democracy), pick a threat pathway, then write and save your Threat Blueprint.",
+    "howToTryItStep4": "Move between zones with Previous / Next or the zone number tabs. Your progress is saved automatically.",
     "howItWorks": "How it works",
-    "howItWorksBody": "Five units guide you from imagining better futures to writing a simple action plan. No login needed — your progress is saved in your browser.",
+    "howItWorksBody": "Five build zones: assemble your future, wire up AI drivers, snap together threat pathways, build your defence stack, and craft your action plan. Your progress is saved in your browser — no login.",
     "disclaimer": "This is an independent capstone project by Joshua Williams for the BlueDot Impact AGI Strategy Course; it is not associated with BlueDot Impact or its staff.",
     "about": "About",
-    "aboutBody": "This game is designed for ages 8+ and works on phones, tablets, and computers. You'll create a Threat Card, a Defence Map, and a Personal Action Plan."
+    "aboutBody": "Ages 8+. Build a Threat Card, a Defence Map, and a Personal Action Plan you can actually use — in class, at work, or in your community."
   },
   "game": {
     "title": "AGI Pathways",
-    "unit": "Unit",
-    "reset": "Reset game",
-    "currentUnit": "Unit {{number}}"
+    "unit": "Build zone",
+    "reset": "Reset build",
+    "currentUnit": "Zone {{number}}",
+    "howToPlay": "How to play",
+    "howToPlayIntro": "Use the zones to build your strategy. Progress is saved in your browser.",
+    "howToPlayZone1": "Zone 1: Build your week and tap People / Planet / Parity blocks; use sliders to fine-tune.",
+    "howToPlayZone3": "Zone 3: Choose an asset and a pathway, then write and save your Threat Blueprint.",
+    "howToPlayNav": "Use Previous / Next or the zone tabs above to move between zones."
   },
   "units": {
     "1": {
-      "title": "Racing to a Better Future",
-      "shortTitle": "Better Future",
-      "intro": "Imagine your future and the world's future. What do you want to protect?"
+      "title": "Build Your Future",
+      "shortTitle": "Your Future",
+      "intro": "Snap together the pieces of a week you care about, then build the world's priorities (People, Planet, Parity)."
     },
     "2": {
       "title": "Drivers of AI Progress",
       "shortTitle": "AI Progress",
-      "intro": "See how AI gets better: compute, algorithms, and data."
+      "intro": "Wire up how AI gets better: compute, algorithms, and data. See how timelines change."
     },
     "3": {
       "title": "Pathways to Harm",
-      "shortTitle": "Pathways to Harm",
-      "intro": "Choose what to protect and explore how things could go wrong."
+      "shortTitle": "Pathways",
+      "intro": "Choose what to protect. Snap together a threat scenario and build your Threat Card — a real blueprint you can use."
     },
     "4": {
       "title": "Defence in Depth",
-      "shortTitle": "Defence in Depth",
-      "intro": "Build layers of defence: prevent, constrain, and withstand."
+      "shortTitle": "Defence",
+      "intro": "Build your defence stack: prevent, constrain, withstand. Assemble your strategy like a Trailmakers build."
     },
     "5": {
       "title": "Start Contributing",
-      "shortTitle": "Start Contributing",
-      "intro": "Choose an intervention and make a simple action plan."
+      "shortTitle": "Action Plan",
+      "intro": "Craft your intervention and a concrete 3–6 month step plus 1–3 year direction. Take it into the real world."
     }
   },
   "unit1": {
-    "myFutureWeek": "My Future Week",
-    "personalFuturePrompt": "What does a good week in your future look like? (e.g. school, family, hobbies)",
-    "worldWelcomeParty": "World Welcome Party",
-    "societalSliders": "How important are these for the world? Move the sliders.",
+    "myFutureWeek": "Build your week",
+    "personalFuturePrompt": "What does a good week look like? Drag in or type the building blocks (e.g. school, family, friends, hobbies).",
+    "worldWelcomeParty": "Build the world's priorities",
+    "societalSliders": "Set how much the world should care about each. Move the sliders or tap the blocks below.",
     "people": "People",
     "planet": "Planet",
     "parity": "Parity",
     "peopleHint": "Safety, dignity, inclusion for everyone.",
     "planetHint": "A healthy environment for all.",
-    "parityHint": "Fairness and balance of power."
+    "parityHint": "Fairness and balance of power.",
+    "priorityBlock": "Set priority",
+    "tapToAdjust": "Tap block to boost; slider to fine-tune."
   },
   "unit3": {
-    "chooseAsset": "What do you want to protect?",
-    "pathways": "Pathways to harm",
+    "chooseAsset": "What are you protecting? Pick your asset.",
+    "pathways": "Snap together a pathway",
     "powerConcentration": "Power concentration",
     "gradualDisempowerment": "Gradual disempowerment",
     "catastrophicPandemics": "Catastrophic pandemics",
     "criticalInfrastructure": "Critical infrastructure",
-    "threatCardTitle": "Your Threat Card",
+    "threatCardTitle": "Your Threat Blueprint",
     "threatCardAsset": "Asset at risk",
     "threatCardPathway": "Pathway",
-    "threatCardDescription": "What could happen?",
-    "writeThreatCard": "Write your Threat Card",
-    "saveThreatCard": "Save Threat Card"
+    "threatCardDescription": "What could happen? (Use this in real discussions or policy work.)",
+    "writeThreatCard": "Build your Threat Card",
+    "saveThreatCard": "Save blueprint",
+    "assetBlocks": "Choose one or more assets to protect",
+    "realWorldNote": "This becomes a real-world artifact: use it in essays, presentations, or community discussions."
   },
   "ppp": {
     "people": "People",
     "planet": "Planet",
     "parity": "Parity",
-    "meterLabel": "Your priorities (People, Planet, Parity)"
+    "meterLabel": "Your build: People, Planet, Parity"
+  },
+  "shared": {
+    "snapHint": "Snap together",
+    "buildHint": "Build",
+    "exploreHint": "Explore",
+    "applyRealWorld": "Use in the real world"
   }
 }

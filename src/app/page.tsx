@@ -12,14 +12,31 @@ export default function Home() {
         tagline={landing.tagline}
         description={landing.description}
         ctaPrimary={landing.ctaPrimary}
+        ctaSubline={landing.ctaSubline}
         ctaSecondary={landing.ctaSecondary}
       />
 
-      <section className="container py-4" aria-labelledby="how-it-works">
-        <h2 id="how-it-works" className="h4 mb-2">
-          {landing.howItWorks}
+      <section className="container py-4" aria-labelledby="how-to-try-it">
+        <h2 id="how-to-try-it" className="h4 mb-3">
+          {landing.howToTryIt}
         </h2>
-        <p className="text-muted">{landing.howItWorksBody}</p>
+        <ol className="list-group list-group-numbered list-group-flush border-0 mb-4">
+          <li className="list-group-item border-0 py-2 px-0 bg-transparent">
+            {landing.howToTryItStep1}
+          </li>
+          <li className="list-group-item border-0 py-2 px-0 bg-transparent">
+            {landing.howToTryItStep2}
+          </li>
+          <li className="list-group-item border-0 py-2 px-0 bg-transparent">
+            {landing.howToTryItStep3}
+          </li>
+          <li className="list-group-item border-0 py-2 px-0 bg-transparent">
+            {landing.howToTryItStep4}
+          </li>
+        </ol>
+        <p className="text-muted mb-0">
+          <strong>{landing.howItWorks}</strong> — {landing.howItWorksBody}
+        </p>
       </section>
 
       <section
@@ -45,8 +62,8 @@ export default function Home() {
         </h2>
         <p className="small text-muted">{landing.aboutBody}</p>
         <p className="small text-muted mt-2">
-          <Link href="/game" className="text-primary">
-            Start the game
+          <Link href="/game" className="text-primary fw-semibold">
+            Enter the sandbox
           </Link>
         </p>
       </footer>
