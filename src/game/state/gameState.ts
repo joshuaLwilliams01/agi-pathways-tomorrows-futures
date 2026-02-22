@@ -32,39 +32,92 @@ export type ThreatPathwayId =
 export type DefenceLayer = "prevent" | "constrain" | "withstand";
 
 // -----------------------------
-// Unit 1 – Racing to a Better Future
+// Unit 1 – Future Bay / Launch Docks (Racing to a Better Future)
 // -----------------------------
 
-export type AgiActorChoice =
-  | "labs"
-  | "governments"
-  | "open_source"
-  | "criminals"
-  | "everyone"
-  | "unsure";
+/** Scene order: 1=Story Dock, 2=Life Boat Builder, 3=World Ferry Builder, 4=AGI Race Pier, 5=Summary */
+export type Unit1SceneId = 1 | 2 | 3 | 4 | 5;
 
-export interface PersonalFutureEntry {
-  ageInFuture: number; // e.g. current age + 20
-  summary: string; // short description of a "good week" in that future
+export type DayOfWeek = "day1" | "day2" | "day3" | "day4" | "day5" | "day6" | "day7";
+
+export type WeekBlockType =
+  | "family"
+  | "learning"
+  | "work_projects"
+  | "rest_health"
+  | "play_hobbies"
+  | "helping_others";
+
+export interface FutureDayPlan {
+  dominantBlock: WeekBlockType;
+  note: string;
 }
 
-export interface SocietalFutureSnapshot {
-  politics: number; // 0–100
-  economy: number; // 0–100
-  technology: number; // 0–100
-  environment: number; // 0–100
-  community: number; // 0–100
-  description: string; // "What the world looks like"
+export interface Unit1PersonalFuture {
+  ageInFuture: number; // e.g. current age + 20
+  days: Record<DayOfWeek, FutureDayPlan>;
+}
+
+export type SocietalDomain =
+  | "politics"
+  | "economy"
+  | "community"
+  | "technology"
+  | "environment";
+
+export interface DomainSetting {
+  level: 1 | 2 | 3 | 4 | 5; // how "good" the future is in this domain
+  notes?: string;
+}
+
+export interface Unit1SocietalFuture {
+  domains: Record<SocietalDomain, DomainSetting>;
   pppScore: PPPScore;
+}
+
+export type AgiActorId =
+  | "frontier_lab"
+  | "national_government"
+  | "open_source_collective"
+  | "big_tech_platform"
+  | "civil_society";
+
+export interface AgiActorChoice {
+  selectedActorId: AgiActorId;
+  notes?: string; // 2–3 sentence reflection from player
 }
 
 export interface Unit1State {
   introSeen: boolean;
-  personalFuture?: PersonalFutureEntry;
-  societalFuture?: SocietalFutureSnapshot;
+  currentScene: Unit1SceneId;
+  character?: PlayerCharacter;
+  personalFuture?: Unit1PersonalFuture;
+  societalFuture?: Unit1SocietalFuture;
   agiActorChoice?: AgiActorChoice;
-  notes?: string;
   completed: boolean;
+}
+
+const DAYS: DayOfWeek[] = ["day1", "day2", "day3", "day4", "day5", "day6", "day7"];
+const SOCIETAL_DOMAINS: SocietalDomain[] = ["politics", "economy", "community", "technology", "environment"];
+
+function defaultFutureDayPlan(): FutureDayPlan {
+  return { dominantBlock: "family", note: "" };
+}
+
+export function createDefaultUnit1PersonalFuture(ageInFuture = 20): Unit1PersonalFuture {
+  return {
+    ageInFuture,
+    days: Object.fromEntries(DAYS.map((d) => [d, defaultFutureDayPlan()])) as Record<DayOfWeek, FutureDayPlan>,
+  };
+}
+
+export function createDefaultUnit1SocietalFuture(): Unit1SocietalFuture {
+  return {
+    domains: Object.fromEntries(
+      SOCIETAL_DOMAINS.map((d) => [d, { level: 3 as const, notes: "" }])
+    ) as Record<SocietalDomain, DomainSetting>,
+    pppScore: { people: 50, planet: 50, parity: 50 },
+  };
 }
 
 // -----------------------------
@@ -118,11 +171,58 @@ export interface Unit2TimelineState {
   notes?: string;
 }
 
+/** Scene order: 1 = Triad Assembly Bay, 2 = Scaling Chamber, 3 = Timeline Observatory */
+export type Unit2SceneId = 1 | 2 | 3;
+
 export interface Unit2State {
+  currentScene: Unit2SceneId;
   triad: Unit2TriadState;
   scaling: Unit2ScalingState;
   timeline: Unit2TimelineState;
   completed: boolean;
+}
+
+// Block power values (1–5 dots → contribute to 0–100 category score)
+const COMPUTE_POWER: Record<ComputeBlockId, number> = {
+  local_gpus: 20,
+  cloud_farms: 35,
+  ai_chips: 50,
+};
+const ALGO_EFFICIENCY: Record<AlgoBlockId, number> = {
+  basic_training: 15,
+  better_tricks: 30,
+  new_architectures: 45,
+  self_improving: 60,
+};
+const DATA_RICHNESS: Record<DataBlockId, number> = {
+  open_web: 20,
+  curated_sets: 40,
+  user_feedback: 50,
+};
+
+const MAX_COMPUTE = 150;
+const MAX_ALGO = 180;
+const MAX_DATA = 150;
+
+export function computeTriadScores(config: TriadConfig): Pick<
+  Unit2TriadState,
+  "computePowerScore" | "algoEfficiencyScore" | "dataRichnessScore" | "overallCapabilityScore"
+> {
+  const computeSum = config.computeBlocks.reduce((s, id) => s + COMPUTE_POWER[id], 0);
+  const algoSum = config.algoBlocks.reduce((s, id) => s + ALGO_EFFICIENCY[id], 0);
+  const dataSum = config.dataBlocks.reduce((s, id) => s + DATA_RICHNESS[id], 0);
+  const computePowerScore = Math.min(100, Math.round((computeSum / MAX_COMPUTE) * 100));
+  const algoEfficiencyScore = Math.min(100, Math.round((algoSum / MAX_ALGO) * 100));
+  const dataRichnessScore = Math.min(100, Math.round((dataSum / MAX_DATA) * 100));
+  const overallCapabilityScore = Math.round(
+    (computePowerScore + algoEfficiencyScore + dataRichnessScore) / 3
+  );
+  return {
+    computePowerScore,
+    algoEfficiencyScore,
+    dataRichnessScore,
+    overallCapabilityScore,
+  };
 }
 
 // -----------------------------
@@ -182,6 +282,9 @@ export interface Unit3PathwayChoice {
   reasoningNote?: string;
 }
 
+/** Scene order: 1 = Horizon Overlook, 2 = Coalition Forge, 3 = Pathway Gates, 4 = Threat Run & Threat Card */
+export type Unit3SceneId = 1 | 2 | 3 | 4;
+
 export interface ThreatCard {
   actor: ActorType;
   scale: ActorScale;
@@ -189,12 +292,15 @@ export interface ThreatCard {
   motivations: MotivationType[];
   targetAsset: AssetId;
   attackPathway: ThreatPathwayId;
-  objective: string; // free text like "seize and keep power"
+  /** Human-readable attack method for the sentence, e.g. "Manipulate elections with deepfakes" */
+  attackPathDescription: string;
+  objective: string; // e.g. "Seize and keep power"
   pppImpactEstimate?: PPPScore;
   summary?: string; // optional final sentence version
 }
 
 export interface Unit3State {
+  currentScene: Unit3SceneId;
   assets: Unit3AssetsState;
   coalition: MisalignedCoalition | null;
   pathwayChoice: Unit3PathwayChoice;
@@ -248,7 +354,11 @@ export interface FocalLayerPlan {
   notes: string;
 }
 
+/** Scene order: 1 = Strategy Skyport, 2 = Kill Chain Dock, 3 = Defence Ring Builder, 4 = Focal Layer Workshop */
+export type Unit4SceneId = 1 | 2 | 3 | 4;
+
 export interface Unit4State {
+  currentScene: Unit4SceneId;
   strategyMix: StrategyMix;
   layerMap: LayerMap;
   focalLayerPlan?: FocalLayerPlan;
@@ -331,7 +441,11 @@ export interface AlignmentNarrative {
   text: string;
 }
 
+/** Scene order: 1 = Contribution Radar, 2 = Intervention Dock, 3 = Role Hangar, 4 = Mission Planner, 5 = Launch & Mission Brief */
+export type Unit5SceneId = 1 | 2 | 3 | 4 | 5;
+
 export interface Unit5State {
+  currentScene: Unit5SceneId;
   focus: Unit5FocusState;
   intervention: Unit5InterventionState;
   role?: RoleChoice;
@@ -380,13 +494,15 @@ export const createInitialGameState = (): GameState => {
     character: undefined,
     unit1: {
       introSeen: false,
+      currentScene: 1,
+      character: undefined,
       personalFuture: undefined,
       societalFuture: undefined,
       agiActorChoice: undefined,
-      notes: undefined,
       completed: false,
     },
     unit2: {
+      currentScene: 1,
       triad: {
         triadConfig: {
           computeBlocks: [],
@@ -416,6 +532,7 @@ export const createInitialGameState = (): GameState => {
       completed: false,
     },
     unit3: {
+      currentScene: 1,
       assets: { protectedAssets: [] },
       coalition: null,
       pathwayChoice: { chosenPathway: null, reasoningNote: "" },
@@ -423,6 +540,7 @@ export const createInitialGameState = (): GameState => {
       completed: false,
     },
     unit4: {
+      currentScene: 1,
       strategyMix: {
         govControl: 33,
         alignedSuperintelligence: 33,
@@ -438,11 +556,12 @@ export const createInitialGameState = (): GameState => {
       completed: false,
     },
     unit5: {
+      currentScene: 1,
       focus: { sector: null, reasoningNote: "" },
       intervention: { chosenIntervention: undefined, research: undefined },
       role: undefined,
       shortTermPlan: [],
-      longTermDirection: undefined,
+      longTermDirection: { skills: "", projects: "", relationships: "" },
       alignmentNarrative: undefined,
       completed: false,
     },
