@@ -1,6 +1,8 @@
 "use client";
 
+import { Suspense, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { GameStoreProvider, useGameStore } from "@/game/state/gameStore";
 import { UnitNav } from "@/game/components/Shared/UnitNav";
 import { PPPMeter } from "@/game/components/Shared/PPPMeter";
@@ -12,8 +14,20 @@ import { Unit5Screen } from "@/game/components/Unit5/Unit5Screen";
 import en from "@/game/data/i18n/en.json";
 
 function GameContent() {
+  const searchParams = useSearchParams();
   const { state, actions } = useGameStore();
   const unit = state.currentUnit;
+
+  const hasAppliedUnitRef = useRef(false);
+  useEffect(() => {
+    if (hasAppliedUnitRef.current) return;
+    const u = searchParams.get("unit");
+    const n = u ? parseInt(u, 10) : NaN;
+    if (n >= 1 && n <= 5) {
+      actions.setCurrentUnit(n);
+      hasAppliedUnitRef.current = true;
+    }
+  }, [searchParams, actions]);
   const defaultPPP = { people: 50, planet: 50, parity: 50 };
   const pppScores =
     unit === 1 && state.unit1.societalFuture?.pppScore
@@ -93,7 +107,9 @@ function GameContent() {
 export default function GamePage() {
   return (
     <GameStoreProvider>
-      <GameContent />
+      <Suspense fallback={<div className="container py-5 text-center text-muted">Loading…</div>}>
+        <GameContent />
+      </Suspense>
     </GameStoreProvider>
   );
 }

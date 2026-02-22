@@ -19,7 +19,13 @@
     "howItWorksBody": "Five build zones: assemble your future, wire up AI drivers, snap together threat pathways, build your defence stack, and craft your action plan. Your progress is saved in your browser — no login.",
     "disclaimer": "This is an independent capstone project by Joshua Williams for the BlueDot Impact AGI Strategy Course; it is not associated with BlueDot Impact or its staff.",
     "about": "About",
-    "aboutBody": "Ages 8+. Build a Threat Card, a Defence Map, and a Personal Action Plan you can actually use — in class, at work, or in your community."
+    "aboutBody": "Ages 8+. Build a Threat Card, a Defence Map, and a Personal Action Plan you can actually use — in class, at work, or in your community.",
+    "titleLine1": "AGI PATHWAYS",
+    "titleLine2": "TOMORROW'S FUTURES",
+    "howToPlay": "How to play",
+    "chooseYourZone": "Choose your zone",
+    "startJourney": "Start journey",
+    "disclaimerExpand": "Disclaimer (tap to expand)"
   },
   "game": {
     "title": "AGI Pathways",
